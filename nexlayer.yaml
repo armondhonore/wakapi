@@ -7,12 +7,26 @@ application:
     servicePorts:
     - 3000
     vars:
-      WAKAPI_DB_TYPE: sqlite3
-      WAKAPI_DB_NAME: /data/wakapi.db
+      WAKAPI_DB_TYPE: postgres
+      WAKAPI_DB_HOST: wakapi-db.pod
+      WAKAPI_DB_PORT: "5432"
+      WAKAPI_DB_NAME: wakapi
+      WAKAPI_DB_USER: wakapi
+      WAKAPI_DB_PASSWORD: wakapi
       WAKAPI_PASSWORD_SALT: nexlayer-wakapi-salt-2024
       WAKAPI_ALLOW_SIGNUP: "true"
       WAKAPI_DISABLE_FRONTPAGE: "false"
+      WAKAPI_INSECURE_COOKIES: "false"
+      WAKAPI_PUBLIC_URL: https://relaxed-weasel-wakapi.cloud.nexlayer.ai
+  - name: wakapi-db
+    image: mirror.gcr.io/library/postgres:16-alpine
+    servicePorts:
+    - 5432
+    vars:
+      POSTGRES_DB: wakapi
+      POSTGRES_USER: wakapi
+      POSTGRES_PASSWORD: wakapi
     volumes:
-    - name: wakapi-data
-      mountPath: /data
+    - name: wakapi-pg-data
+      mountPath: /var/lib/postgresql/data
       size: 5Gi
